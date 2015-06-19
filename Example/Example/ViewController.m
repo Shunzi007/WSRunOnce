@@ -10,6 +10,9 @@
 #import "WSRunOnce.h"
 
 @interface ViewController ()
+@property (strong, nonatomic) IBOutlet UILabel *versionLabel;
+@property (strong, nonatomic) IBOutlet UILabel *buildLabel;
+@property (strong, nonatomic) IBOutlet UILabel *onceLabel;
 
 @end
 
@@ -21,16 +24,20 @@
 }
 
 - (IBAction)action:(UIButton *)sender {
+    __weak typeof (self) weakself = self;
+    self.versionLabel.text = @"";
+    self.buildLabel.text = @"";
+    self.onceLabel.text = @"";
     [WSRunOnce runOnceByVersionWithKey:@"version" action:^BOOL(NSString *version) {
-        NSLog(@"version = %@", version);
+        weakself.versionLabel.text = [NSString stringWithFormat:@"version = %@", version];
         return YES;
     }];
     [WSRunOnce runOnceByBuildWithKey:@"bulid" action:^BOOL(NSString *build) {
-        NSLog(@"build = %@", build);
+        weakself.buildLabel.text = [NSString stringWithFormat:@"build = %@", build];
         return YES;
     }];
     [WSRunOnce runOnceWithKey:@"key" action:^{
-        NSLog(@"runOnce");
+        weakself.onceLabel.text = @"runOnce";
     }];
 }
 
